@@ -27,12 +27,24 @@ myHisto<-function(){
 }
 
 myMM<-function(){
-  #median is 0, so should you factor out times where steps are 0?  seems like that is pulling it down
-  myMMData<<-summarise(group_by(myDataNA,date),mean=mean(steps),median=median(steps, na.rm=TRUE), sum=sum(steps))
+  #Mean and median number of steps taken each day
+  myMMData<<-summarise(group_by(myDataNA,date), steps=sum(steps))
+  print(mean(myMMData$steps))
+  print(median(myMMData$steps))
 }
 
+myDailyAct<-function(){
+  #Time series plot of the average number of steps taken
+  myInterval<<-myDataNA %>%
+    group_by(interval) %>%
+    summarise(steps = sum(steps))
+  
+  g<-ggplot(myInterval,aes(interval,steps))+geom_line()
+  print(g)
+}
 
 #myDL()
 myTidy()
-myHisto()
+#myHisto()
 myMM()
+myDailyAct()
