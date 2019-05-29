@@ -27,6 +27,7 @@ myHisto<-function(){
 }
 
 myMM<-function(){
+  #Q3
   #Mean and median number of steps taken each day
   myMMData<<-summarise(group_by(myDataNA,date), steps=sum(steps))
   print(mean(myMMData$steps))
@@ -34,6 +35,7 @@ myMM<-function(){
 }
 
 myDailyAct<-function(){
+  #Q4
   #Time series plot of the average number of steps taken
   myInterval<<-myDataNA %>%
     group_by(interval) %>%
@@ -41,6 +43,12 @@ myDailyAct<-function(){
   
   g<-ggplot(myInterval,aes(interval,steps))+geom_line()
   print(g)
+  #5
+  myIntervalAvg<<-myDataNA %>%
+    group_by(interval) %>%
+    summarise(steps = mean(steps))
+  
+  print(myIntervalAvg[which.max(myIntervalAvg$steps),])
 }
 
 #myDL()
