@@ -23,15 +23,17 @@ myTidy<-function(){
 myHisto<-function(){
   #Q2
   mySumData<<-na.omit(summarise(group_by(myData,date),steps=sum(steps)))
-  print(ggplot(mySumData,aes(steps))+geom_histogram(bins=5))
+  png("q2Plot.png",width=480,height=480)
+    print(ggplot(mySumData,aes(steps))+geom_histogram())
+  dev.off()
 }
 
 myMM<-function(){
   #Q3
   #Mean and median number of steps taken each day
   myMMData<<-summarise(group_by(myDataNA,date), steps=sum(steps))
-  print(mean(myMMData$steps))
-  print(median(myMMData$steps))
+  print(data.table(mean=mean(myMMData$steps),median=median(myMMData$steps)))
+  
 }
 
 myDailyAct<-function(){
@@ -40,9 +42,10 @@ myDailyAct<-function(){
   myInterval<<-myDataNA %>%
     group_by(interval) %>%
     summarise(steps = sum(steps))
-  
+  png("q4Plot.png",width=480,height=480)
   g<-ggplot(myInterval,aes(interval,steps))+geom_line()
   print(g)
+  dev.off()
   #5
   myIntervalAvg<<-myDataNA %>%
     group_by(interval) %>%
@@ -51,19 +54,34 @@ myDailyAct<-function(){
   print(myIntervalAvg[which.max(myIntervalAvg$steps),])
 }
 myImputtingNA<-function(){
+  #Q6
   #Code to describe and show a strategy for imputing missing data
   #replace NA with another value, probably needs to use an apply of some sort
   #use lapply
   #myDataFix<<-myData[,stepsMean:=mean(steps), by=interval]
   myDataFix<<-myData
-  myDataFix[,steps:=as.double(steps)]
+  #myDataFix[,steps:=as.double(steps)]
+  #myDataFix[,stepsMean:=mean(steps,na.rm=TRUE), by=interval]
   myDataFix[,stepsMean:=mean(steps,na.rm=TRUE), by=interval]
   myDataFix[is.na(steps),steps:=stepsMean]
+  
+  #Q7 Histogram of the total number of steps taken each day after missing values are imputed
+  mySumData2<<-summarise(group_by(myData,date),steps=sum(steps))
+  png("q7Plot.png",width=480,height=480)
+  print(ggplot(mySumData2,aes(steps))+geom_histogram())
+  dev.off()
+  print(data.table(mean=mean(mySumData2$steps),median=median(mySumData2$steps)))
+  fwrite(myDataFix[,1:3],file="fixedData.csv")
+}
+
+myPanel<-function(){
+  #use something like wday() to determien day of week
+  #add that to the table, then us gg plot to create multiplot using that column
 }
 
 #myDL()
 myTidy()
-#myHisto()
+myHisto()
 myMM()
 myDailyAct()
 myImputtingNA()
