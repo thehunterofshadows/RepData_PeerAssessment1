@@ -50,9 +50,20 @@ myDailyAct<-function(){
   
   print(myIntervalAvg[which.max(myIntervalAvg$steps),])
 }
+myImputtingNA<-function(){
+  #Code to describe and show a strategy for imputing missing data
+  #replace NA with another value, probably needs to use an apply of some sort
+  #use lapply
+  #myDataFix<<-myData[,stepsMean:=mean(steps), by=interval]
+  myDataFix<<-myData
+  myDataFix[,steps:=as.double(steps)]
+  myDataFix[,stepsMean:=mean(steps,na.rm=TRUE), by=interval]
+  myDataFix[is.na(steps),steps:=stepsMean]
+}
 
 #myDL()
 myTidy()
 #myHisto()
 myMM()
 myDailyAct()
+myImputtingNA()
