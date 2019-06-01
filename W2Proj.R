@@ -3,6 +3,7 @@ library(data.table)
 library(ggplot2)
 library(dplyr)
 library(lubridate)
+library(timeDate)
 
 
 myDL<-function(){
@@ -77,6 +78,27 @@ myImputtingNA<-function(){
 myPanel<-function(){
   #use something like wday() to determien day of week
   #add that to the table, then us gg plot to create multiplot using that column
+  #use this isWeekday(myData$date,wday=1:5)
+  #mySumData2<<-data.table(mySumData2)
+  #mySumData2[,wkdy:=isWeekday(date,wday=1:5)]
+  #png("q8Plot.png",width=480,height=480)
+  #g<-ggplot(mySumData2,aes(steps))
+  #g<-g+facet_grid(wkdy ~.)
+  #g<-g+geom_point()
+  #print(g)
+  #dev.off()
+  
+  myWeek<<-data.table(copy(myDataFix))
+  myWeek[,wkdy:=isWeekday(date,wday=1:5)]
+  myWeek[wkdy==TRUE,wkdy2:="Weekday"]
+  myWeek[wkdy==FALSE,wkdy2:="Weekend"]
+  myWeek<<-summarise(group_by(myWeek,wkdy2,interval),steps=mean(steps))
+  #png("q8Plot.png",width=480,height=480)
+  g<-ggplot(myWeek,aes(interval,steps))
+  g<-g+facet_grid(wkdy2 ~.)
+  g<-g+geom_line()
+  print(g)
+  #dev.off()
 }
 
 #myDL()
@@ -85,3 +107,4 @@ myHisto()
 myMM()
 myDailyAct()
 myImputtingNA()
+myPanel()
