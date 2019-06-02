@@ -7,7 +7,7 @@ output:
 
 
 ## Loading and preprocessing the data
-#### Loaded the following libraies
+#### Loaded the following libraries
 
 ```r
 library(data.table)
@@ -18,6 +18,7 @@ library(timeDate)
 library(knitr)
 ```
 
+
 #### Load in the data & create a set without NA's to be used later
 
 ```r
@@ -27,6 +28,7 @@ library(knitr)
 
 
 ## What is mean total number of steps taken per day?
+
 #### Create a data set that omits NA's, groups by date, and sums by Steps.  Then plots the results
 
 ```r
@@ -35,6 +37,7 @@ library(knitr)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
 
 #### Then determine the mean and median number of steps taken each day
 
@@ -79,6 +82,7 @@ library(knitr)
 
 
 ## Imputing missing values
+
 #### I chose to replace NA's with the avearage for that inverval.
 
 ```r
@@ -87,12 +91,6 @@ library(knitr)
   myDataFix[is.na(steps),steps:=stepsMean]
 ```
 
-```
-## Warning in `[.data.table`(myDataFix, is.na(steps), `:=`(steps, stepsMean)):
-## Coerced double RHS to integer to match the type of the target column
-## (column 1 named 'steps'). One or more RHS values contain fractions which
-## have been lost; e.g. item 1 with value 1.716981 has been truncated to 1.
-```
 
 #### Then let's create a histogram of the results by groupign by date, and sum the steps
 
@@ -102,6 +100,7 @@ library(knitr)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
 
 #### Then show the average mean and median now that the NA's have been replaced with mean values.
 
@@ -114,6 +113,7 @@ library(knitr)
 ## 1: 10749.77  10641
 ```
 
+
 #### Finally let's export the new dataset incase someone else would like to use it.
 
 ```r
@@ -122,6 +122,7 @@ library(knitr)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
 #### To determine the different betwen weekday mean, and weekend, I created a column in the data set which splits out the two.  Then changed the values from boolean to Weekday, and Weekend to save time when plotting.  Yes, I could have added the label instead, but chose to go this route to save time.
 
 ```r

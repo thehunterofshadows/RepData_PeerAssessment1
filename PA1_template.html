@@ -195,8 +195,8 @@ $(document).ready(function () {
 
 <div id="loading-and-preprocessing-the-data" class="section level2">
 <h2>Loading and preprocessing the data</h2>
-<div id="loaded-the-following-libraies" class="section level4">
-<h4>Loaded the following libraies</h4>
+<div id="loaded-the-following-libraries" class="section level4">
+<h4>Loaded the following libraries</h4>
 <pre class="r"><code>library(data.table)
 library(ggplot2)
 library(dplyr)
@@ -256,10 +256,6 @@ library(knitr)</code></pre>
 <pre class="r"><code>  myDataFix&lt;&lt;-myData
   myDataFix[,stepsMean:=mean(steps,na.rm=TRUE), by=interval]
   myDataFix[is.na(steps),steps:=stepsMean]</code></pre>
-<pre><code>## Warning in `[.data.table`(myDataFix, is.na(steps), `:=`(steps, stepsMean)):
-## Coerced double RHS to integer to match the type of the target column
-## (column 1 named 'steps'). One or more RHS values contain fractions which
-## have been lost; e.g. item 1 with value 1.716981 has been truncated to 1.</code></pre>
 </div>
 <div id="then-lets-create-a-histogram-of-the-results-by-groupign-by-date-and-sum-the-steps" class="section level4">
 <h4>Then let’s create a histogram of the results by groupign by date, and sum the steps</h4>

@@ -7,7 +7,7 @@ output:
 
 
 ## Loading and preprocessing the data
-#### Loaded the following libraies
+#### Loaded the following libraries
 ```{r echo=TRUE, message=FALSE}
 library(data.table)
 library(ggplot2)
@@ -17,6 +17,7 @@ library(timeDate)
 library(knitr)
 ```
 
+
 #### Load in the data & create a set without NA's to be used later
 ```{r echo=TRUE}
   myData<<-fread("activity.csv", sep=",",header=TRUE)
@@ -25,11 +26,13 @@ library(knitr)
 
 
 ## What is mean total number of steps taken per day?
+
 #### Create a data set that omits NA's, groups by date, and sums by Steps.  Then plots the results
 ```{r echo=TRUE, message=FALSE}
   mySumData<<-na.omit(summarise(group_by(myData,date),steps=sum(steps)))
   print(ggplot(mySumData,aes(steps))+geom_histogram(col="blue", fill="green"))
 ```
+
 
 #### Then determine the mean and median number of steps taken each day
 ```{r echo=TRUE}
@@ -57,12 +60,14 @@ library(knitr)
 
 
 ## Imputing missing values
+
 #### I chose to replace NA's with the avearage for that inverval.
-```{r echo=TRUE, message=FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
   myDataFix<<-myData
   myDataFix[,stepsMean:=mean(steps,na.rm=TRUE), by=interval]
   myDataFix[is.na(steps),steps:=stepsMean]
 ```
+
 
 #### Then let's create a histogram of the results by groupign by date, and sum the steps
 ```{r echo=TRUE, message=FALSE}
@@ -70,10 +75,12 @@ library(knitr)
   print(ggplot(mySumData2,aes(steps))+geom_histogram(col="blue",fill="green"))
 ```
 
+
 #### Then show the average mean and median now that the NA's have been replaced with mean values.
 ```{r echo=TRUE}
   print(data.table(mean=mean(mySumData2$steps),median=median(mySumData2$steps)))
 ```
+
 
 #### Finally let's export the new dataset incase someone else would like to use it.
 ```{r echo=TRUE}
@@ -82,6 +89,7 @@ library(knitr)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
 #### To determine the different betwen weekday mean, and weekend, I created a column in the data set which splits out the two.  Then changed the values from boolean to Weekday, and Weekend to save time when plotting.  Yes, I could have added the label instead, but chose to go this route to save time.
 ```{r echo=TRUE}
   myWeek<<-data.table(copy(myDataFix))

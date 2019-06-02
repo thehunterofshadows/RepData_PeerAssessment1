@@ -33,6 +33,7 @@ myHisto<-function(){
 myMM<-function(){
   #Q3
   #Mean and median number of steps taken each day
+  myDataNA<<-na.omit(myData)
   myMMData<<-summarise(group_by(myDataNA,date), steps=sum(steps))
   print(data.table(mean=mean(myMMData$steps),median=median(myMMData$steps)))
   
