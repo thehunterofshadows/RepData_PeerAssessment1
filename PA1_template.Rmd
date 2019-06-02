@@ -65,7 +65,7 @@ library(knitr)
 ```
 
 #### Then let's create a histogram of the results by groupign by date, and sum the steps
-```{r echo=TRUE}
+```{r echo=TRUE, message=FALSE}
   mySumData2<<-summarise(group_by(myData,date),steps=sum(steps))
   print(ggplot(mySumData2,aes(steps))+geom_histogram(col="blue",fill="green"))
 ```
@@ -82,3 +82,18 @@ library(knitr)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+#### To determine the different betwen weekday mean, and weekend, I created a column in the data set which splits out the two.  Then changed the values from boolean to Weekday, and Weekend to save time when plotting.  Yes, I could have added the label instead, but chose to go this route to save time.
+```{r echo=TRUE}
+  myWeek<<-data.table(copy(myDataFix))
+  
+  myWeek[,wkdy:=isWeekday(date,wday=1:5)]
+  myWeek[wkdy==TRUE,wkdy2:="Weekday"]
+  myWeek[wkdy==FALSE,wkdy2:="Weekend"]
+  
+  myWeek<<-summarise(group_by(myWeek,wkdy2,interval),steps=mean(steps))
+  
+  g<-ggplot(myWeek,aes(interval,steps))
+  g<-g+facet_grid(wkdy2 ~.)
+  print(g<-g+geom_line(col="green", size=1))
+  
+  ```

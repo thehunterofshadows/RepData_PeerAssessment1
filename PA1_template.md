@@ -101,10 +101,6 @@ library(knitr)
   print(ggplot(mySumData2,aes(steps))+geom_histogram(col="blue",fill="green"))
 ```
 
-```
-## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
-```
-
 ![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 #### Then show the average mean and median now that the NA's have been replaced with mean values.
@@ -126,3 +122,20 @@ library(knitr)
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+#### To determine the different betwen weekday mean, and weekend, I created a column in the data set which splits out the two.  Then changed the values from boolean to Weekday, and Weekend to save time when plotting.  Yes, I could have added the label instead, but chose to go this route to save time.
+
+```r
+  myWeek<<-data.table(copy(myDataFix))
+  
+  myWeek[,wkdy:=isWeekday(date,wday=1:5)]
+  myWeek[wkdy==TRUE,wkdy2:="Weekday"]
+  myWeek[wkdy==FALSE,wkdy2:="Weekend"]
+  
+  myWeek<<-summarise(group_by(myWeek,wkdy2,interval),steps=mean(steps))
+  
+  g<-ggplot(myWeek,aes(interval,steps))
+  g<-g+facet_grid(wkdy2 ~.)
+  print(g<-g+geom_line(col="green", size=1))
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
